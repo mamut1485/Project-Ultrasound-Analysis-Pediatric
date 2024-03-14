@@ -1,0 +1,244 @@
+---
+title: "**EPS MATASANOS** - PESO SALUDABLE"
+author: "by Rafa Reyes"
+#format: revealjs
+format: 
+   dashboard:
+     logo: "logo3.png"
+editor: visual
+engine: knitr
+output:
+  quarto::quarto_html_document:
+    theme: default
+---
+
+```{css, echo=FALSE}
+body {
+  background-color: #658AAE;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(reticulate)
+library(tinytex)
+library(knitr)
+library(kableExtra)
+library(raster)
+library(ggplot2)
+library(dplyr)
+library(maps)
+library(mapdata)
+library(readxl)
+library(ggmap)
+library(googleway)
+library(ggmap)
+library(gridExtra)
+register_google(key = "AIzaSyDAL2AG-5po3EPdCpl9c3T2DUwXaJNBRWc")
+```
+
+```{python, include=F}
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+```
+
+```{python, echo=F}
+df = pd.read_csv("BD_costos_medicos.csv", sep = ';')
+```
+
+```{python, echo=F}
+# Quitar datos duplicados
+df = df.drop_duplicates()
+
+# Borramos la última columna que no hace parte significativa de los datos.
+# la última columna ('Unnamed: 7') usando iloc
+df = df.iloc[:, :-1]
+
+# cambiamos los valores de la columna costo a MILLONES, para que sea mas facil su manejor
+df['costo'] = df['costo'] / 1000000
+```
+
+```{python, echo=F}
+# Gardamos el dataset original en uno auxiliar para mejorar su visualizacion mas adelante usando la funcion Kable()
+aux = df
+```
+
+# 📈 Problemática PS
+
+## Diabetes por grupos poblacionales
+
+## 
+
+```{python, echo=F}
+# Crear una figura con dos subgráficos (2 filas, 1 columna)
+fig, axs = plt.subplots(2, 1, figsize=(6, 8), gridspec_kw={'height_ratios': [2, 1]});
+
+# Gráfico 1: porcentaje de casos positivos de diabetes entre hombres y mujeres
+df_diabetes_gender = df[df['diabetico'] == 'si'].groupby('genero').size()
+axs[0].pie(df_diabetes_gender, labels=df_diabetes_gender.index, autopct='%1.1f%%', startangle=90, colors=['lightcoral', 'lightblue']);
+axs[0].add_artist(plt.Circle((0, 0), 0.6, fc='white'));
+
+# Distribución de la edad en casos diabéticos y no diabéticos
+sns.histplot(x='edad', hue='diabetico', data=df, bins=20, kde=True)
+plt.title('Distribución de la edad en casos diabéticos y no diabéticos')
+
+fig.text(0.5, 0.95, '% casos de diabetes entre hombres y mujeres', ha='center', va='center', fontsize=14, fontweight='bold')
+
+# Ajustar el diseño y espaciado entre subgráficos
+plt.tight_layout();
+```
+
+### 
+::: {style="color: black; font-size: 18pt; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;"}
+📌 Este análisis explora datos detallados en salud, al analizar la información demográfica de pacientes con **diabetes** o en riesgo de contraer la enfermedad, y sus costos asociados. Las visualizaciones revelan información valiosa para informar estrategias específicas de la aplicación del **Programa de Peso Saludable**.
+
+💡 *(Valores expresados en millones de pesos colombianos)*
+:::
+```{r, echo=F, include=T, eval=T}
+aux = py$aux
+kable(aux, digits = 2, caption = "DataSet costos medicos por Diagnostico de Diabetes") 
+```
+
+```{python, echo=F}
+# Crear subplots
+fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 6))
+
+# Gráfica de conteo por género
+sns.countplot(x='genero', data=df, ax=axes[0], palette={'femenino': 'lightcoral', 'masculino': 'lightblue'})
+axes[0].set_title('Distribución de Género', fontweight='bold', fontsize=14)
+axes[0].set_xlabel('Género')
+axes[0].set_ylabel('Conteo')
+
+# Gráfico de barras para la distribución de diabetes por género
+sns.countplot(x='genero', hue='diabetico', data=df, ax=axes[1], palette={'si': 'sandybrown', 'no': 'slategray'}, edgecolor='black' )
+axes[1].set_title('Distribución de Diabetes por Género', fontweight='bold', fontsize=14)
+axes[1].set_xlabel('Género')
+axes[1].set_ylabel('Conteo')
+
+# Ajustar el diseño
+plt.tight_layout()
+
+# Mostrar los subplots
+plt.show()
+
+```
+
+# 🚀 Análisis de Datos
+
+##
+::: {style="color: black; font-size: 18pt; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;"}
+📋 Visualizamos la distribución de los datos obtenidos por las encuestas en las diferentes ciudades del país.
+:::
+```{python, echo=F}
+
+#Gráfico de Barras de Ciudades:
+plt.figure(figsize=(10, 6))
+sns.countplot(x='ciudad', data=df, palette='viridis')
+plt.title('Distribución de Ciudades')
+plt.xlabel('Ciudad')
+plt.ylabel('Conteo')
+plt.show()
+```
+
+###
+::: {style="color: black; font-size: 18pt; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;"}
+🩺 Comportamiento de los datos obtenidos por IMC de los pacientes respecto al costo asociado.
+:::
+```{python, echo=F}
+
+#Diagrama de Dispersión IMC vs. Costo:
+
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x='imc', y='costo', hue='diabetico', data=df, palette='coolwarm')
+plt.title('IMC vs. Costo')
+plt.xlabel('IMC')
+plt.ylabel('Costo')
+plt.legend(title='Diabético', loc='upper right')
+plt.show()
+
+```
+::: {style="color: black; font-size: 18pt; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;"}
+🩺 Comportamiento de la edad respecto al costo del tratamiento de la enfermedad.
+:::
+```{python, echo=F}
+
+# Crear el gráfico de dispersión
+plt.figure(figsize=(10, 6))
+plt.scatter(df['edad'], df['costo'], color='blue', alpha=0.5)  
+plt.title('Gráfico de dispersión de Edad vs. Costo')
+plt.xlabel('Edad')
+plt.ylabel('Costo')
+plt.grid(True)  # Agregar una cuadrícula al gráfico
+plt.show()
+
+```
+
+# 🎯 Ciudad Objetivo
+##
+```{r, echo=F, include=T, eval=T}
+# Cargar el conjunto de datos desde un archivo CSV
+df <- read.csv("BD_costos_medicos.csv", sep = ';')
+df <- df[!duplicated(df), ]
+
+# Eliminar la última columna sin nombre
+df <- df[, -ncol(df)]
+
+# Dividir los valores de la columna 'costos' entre 1,000,000
+df <- transform(df, costo = costo / 1000000)
+
+# Crear un dataframe con las ciudades y sus coordenadas
+ciudades <- data.frame(
+  Ciudad = c("bogota", "cali", "cartagena", "medellin"),
+  Latitud = c(4.6097, 3.4516, 10.3910, 6.2308),
+  Longitud = c(-74.0817, -76.5320, -75.4794, -75.5906),
+  Color = c("red", "blue", "green", "orange")
+)
+
+# Obtener un mapa base de Colombia
+mapa_colombia <- get_map(location = "Colombia", zoom = 6, maptype = "terrain")
+
+# Crear el mapa con los puntos de las ciudades
+mapa <- ggmap(mapa_colombia) +
+  geom_point(data = ciudades, aes(x = Longitud, y = Latitud, color = Color), size = 3) +
+  labs(title = "           Ciudades analizadas en COLOMBIA") +
+  scale_color_identity()
+
+print(mapa)
+```
+###
+🔴 BOGOTA <br>
+🔵 CALI <br>
+🟢 CARTAGENA <br>
+🟠 MEDELLIN
+```{python, echo=F}
+# Crear un DataFrame con la información acumulada por ciudad y el costo acumulado de casos positivos
+data_acumulado = {
+    'ciudad': ['bogota', 'cali', 'cartagena', 'medellin'],
+    'casos_positivos': [df[(df['ciudad'] == 'bogota') & (df['diabetico'] == 'si')].shape[0],
+                        df[(df['ciudad'] == 'cali') & (df['diabetico'] == 'si')].shape[0],
+                        df[(df['ciudad'] == 'cartagena') & (df['diabetico'] == 'si')].shape[0],
+                        df[(df['ciudad'] == 'medellin') & (df['diabetico'] == 'si')].shape[0]],
+    'costo_acumulado': [round(df[(df['ciudad'] == 'bogota') & (df['diabetico'] == 'si')]['costo'].sum(), 2),
+                        round(df[(df['ciudad'] == 'cali') & (df['diabetico'] == 'si')]['costo'].sum(), 2),
+                        round(df[(df['ciudad'] == 'cartagena') & (df['diabetico'] == 'si')]['costo'].sum(), 2),
+                        round(df[(df['ciudad'] == 'medellin') & (df['diabetico'] == 'si')]['costo'].sum(), 2)]
+}
+
+df_acumulado = pd.DataFrame(data_acumulado)
+
+
+# Agregar la letra 'M' al final de los valores
+df_acumulado['costo_acumulado'] = df_acumulado['costo_acumulado'].astype(str) + 'M'
+```
+
+```{r, echo=F, include=T, eval=T}
+df_acumulado = py$df_acumulado
+kable(df_acumulado, digits = 2, caption = "Costo acumulado diabetes por ciudad") 
+```
+
+**Conclusion** <br>
+Tras el análisis, determinamos que la ciudad de MEDELLÍN es la mejor candidata para la implementación del Programa de Peso Saludable, seguida por CARTAGENA, debido a los elevados costos médicos asociados a pacientes con diabetes y los altos niveles de índice de masa corporal (IMC). Al ser un programa de prevención, esperamos reducir estos costos significativamente.
+
