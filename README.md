@@ -4,6 +4,7 @@
 
 ## Estudiante
 Rafael Reyes Velasquez
+CC 8870312
 
 ## Resumen
 Se hizo uso de una base de datos pública proporcionada por el Hospital  St. Hedwig en Regensburg, Alemania. Esta base de datos fue creada a partir de un estudio que recopiló y organizó información sobre una cohorte de pacientes pediátricos que presentaban dolor abdominal entre 2016 a 2021. Se poseen dos set de datos los cuales corresponden a datos estructurados y no estructurados. Por lo anterior se tomó la decisión de analizarlos separadamente y por ello se crearon dos archivos '.ipynb'. En ellos encontrará explicaciones del proceso que se hizo de análisis.
