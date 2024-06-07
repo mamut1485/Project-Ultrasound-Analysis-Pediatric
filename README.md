@@ -1,6 +1,7 @@
 # Desarrollo de un sistema de inteligencia artificial para la detección de apendicitis sobre Ecografía de abdomen.
 
 ## Especialización en Analítica y Ciencia de Datos
+## UNIVERSIDAD DE ANTIOQUIA
 
 ## Estudiante
 Rafael Reyes Velasquez
