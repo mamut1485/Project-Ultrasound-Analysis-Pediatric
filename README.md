@@ -1,4 +1,4 @@
-# Implementacion de un modelo inteligencia artificial para la detección de apendicitis sobre Ecografía de abdomen pediatricas.
+# Implementación de un modelo inteligencia artificial para la detección de apendicitis sobre Ecografía de abdomen pediatricas.
 
 ## UNIVERSIDAD DE ANTIOQUIA
 ## Especialización en Analítica y Ciencia de Datos
