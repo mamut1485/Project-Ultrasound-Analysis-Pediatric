@@ -15,7 +15,7 @@ Se aclara que en el archivo Procesamiento_de_imágenes.ipynb los códigos adentr
 ## Contenido
 
 - **Analisis_de_datos.ipynb:** Análisis de datos estructurados. Aquí se encuentra el código y las decisiones que se tomaron para elegir los datos estructurados de importancia. 
-- **Procesamiento_de_imagenes.ipynb:** Se encuentra los códigos junto a su respectiva explicación sobre el poqué y el cómo de su procesamiento. Para que los códigos corran se recomienda realizarlo localmente en archivos separados, tener las librerías que allí se usan instaladas y crear una estruuctura de carpetas igual a la que se encuentra en 'procesadas' dentro de 'us_images'. 
+- **Procesamiento_de_imagenes.ipynb:** Se encuentra los códigos junto a su respectiva explicación sobre el por qué y el cómo de su procesamiento. Para que los códigos corran se recomienda realizarlo localmente en archivos separados, tener las librerías que allí se usan instaladas y crear una estructura de carpetas igual a la que se encuentra en 'procesadas' dentro de 'us_images'. 
 - **structured_data:** Contiene los datos estructurados del proyecto
 - **us_images (carpeta):** Posee 2 carpetas
     1. ***originales:*** contiene todas las imágenes originales del estudio sin ningún cambio.
